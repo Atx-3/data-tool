@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataForge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 360px;
+            min-height: 400px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #fff;
+        }
+
+        .header {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status {
+            margin-left: auto;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status.connected {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .content {
+            padding: 16px;
+        }
+
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile-field {
+            display: flex;
+            margin-bottom: 10px;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .profile-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .field-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .field-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .field-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 2px;
+        }
+
+        .field-value {
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .field-value.empty {
+            color: rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-top: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .toast.success {
+            background: rgba(16, 185, 129, 0.9);
+        }
+
+        .toast.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <span class="logo">⚡ DataForge</span>
+        <span id="status" class="status disconnected">Offline</span>
+    </div>
+
+    <div class="content">
+        <div id="not-linkedin" class="empty-state" style="display:none;">
+            <h3>📍 Not on LinkedIn</h3>
+            <p>Navigate to a LinkedIn profile to capture data</p>
+        </div>
+
+        <div id="profile-section" style="display:none;">
+            <div class="section-title">Profile Data</div>
+            <div class="profile-card">
+                <div class="profile-field">
+                    <div class="field-icon">👤</div>
+                    <div class="field-content">
+                        <div class="field-label">Name</div>
+                        <div class="field-value" id="field-name">-</div>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-icon">💼</div>
+                    <div class="field-content">
+                        <div class="field-label">Title</div>
+                        <div class="field-value" id="field-title">-</div>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-icon">🏢</div>
+                    <div class="field-content">
+                        <div class="field-label">Company</div>
+                        <div class="field-value" id="field-company">-</div>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-icon">📧</div>
+                    <div class="field-content">
+                        <div class="field-label">Email</div>
+                        <div class="field-value" id="field-email">-</div>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-icon">📱</div>
+                    <div class="field-content">
+                        <div class="field-label">Phone</div>
+                        <div class="field-value" id="field-phone">-</div>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-icon">🔗</div>
+                    <div class="field-content">
+                        <div class="field-label">LinkedIn URL</div>
+                        <div class="field-value" id="field-linkedin">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="save-btn" class="btn btn-primary">
+                <span>💾</span> Save to DataForge
+            </button>
+
+            <button id="refresh-btn" class="btn btn-secondary">
+                <span>🔄</span> Refresh Data
+            </button>
+        </div>
+
+        <div class="stats" style="margin-top:16px;">
+            <div class="stat">
+                <div class="stat-value" id="saved-count">0</div>
+                <div class="stat-label">Saved Today</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="total-count">0</div>
+                <div class="stat-label">Total Leads</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
