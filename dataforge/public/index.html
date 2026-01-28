@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataForge - Data Extraction & Outreach Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-bolt"></i>
+                    <span>DataForge</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="leads">
+                    <i class="fas fa-users"></i>
+                    <span>Leads</span>
+                </a>
+                <a href="#" class="nav-item" data-page="scraper">
+                    <i class="fas fa-search"></i>
+                    <span>Scraper</span>
+                </a>
+                <a href="#" class="nav-item" data-page="campaigns">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="#" class="nav-item" data-page="scheduler">
+                    <i class="fas fa-clock"></i>
+                    <span>Scheduler</span>
+                </a>
+                <a href="#" class="nav-item" data-page="templates">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Templates</span>
+                </a>
+                <a href="#" class="nav-item" data-page="proxy">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Proxy</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <div class="status-item">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="status-dot" id="linkedin-status"></span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <span class="status-dot" id="whatsapp-status"></span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-envelope"></i>
+                        <span class="status-dot" id="email-status"></span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search leads..." id="global-search">
+                    </div>
+                    <button class="btn btn-primary" id="quick-action-btn">
+                        <i class="fas fa-plus"></i>
+                        Quick Action
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-leads">0</h3>
+                                <p>Total Leads</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-emails">0</h3>
+                                <p>Emails Found</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-phones">0</h3>
+                                <p>Phones Found</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-sent">0</h3>
+                                <p>Messages Sent</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card activity-card">
+                            <div class="card-header">
+                                <h2>Recent Activity</h2>
+                                <button class="btn-icon"><i class="fas fa-sync-alt"></i></button>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-list" id="activity-list">
+                                    <!-- Activity items will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card quick-actions-card">
+                            <div class="card-header">
+                                <h2>Quick Actions</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="quick-actions-grid">
+                                    <button class="quick-action" onclick="showPage('scraper')">
+                                        <i class="fab fa-linkedin"></i>
+                                        <span>LinkedIn Search</span>
+                                    </button>
+                                    <button class="quick-action" onclick="showImportModal()">
+                                        <i class="fas fa-upload"></i>
+                                        <span>Import Excel</span>
+                                    </button>
+                                    <button class="quick-action" onclick="showPage('campaigns')">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>Email Campaign</span>
+                                    </button>
+                                    <button class="quick-action" onclick="initWhatsApp()">
+                                        <i class="fab fa-whatsapp"></i>
+                                        <span>WhatsApp</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leads Page -->
+                <div id="leads-page" class="page">
+                    <div class="page-actions">
+                        <div class="filters">
+                            <select id="lead-source-filter">
+                                <option value="">All Sources</option>
+                                <option value="linkedin_search">LinkedIn Search</option>
+                                <option value="linkedin_profile">LinkedIn Profile</option>
+                                <option value="import">Import</option>
+                                <option value="manual">Manual</option>
+                            </select>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="has-email-filter"> Has Email
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="has-phone-filter"> Has Phone
+                            </label>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-secondary" onclick="exportLeads()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <button class="btn btn-secondary" onclick="showImportModal()">
+                                <i class="fas fa-upload"></i> Import
+                            </button>
+                            <button class="btn btn-primary" onclick="showAddLeadModal()">
+                                <i class="fas fa-plus"></i> Add Lead
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-container">
+                            <table class="data-table" id="leads-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all-leads"></th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Company</th>
+                                        <th>Title</th>
+                                        <th>Source</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leads-tbody">
+                                    <!-- Leads will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+                            <span id="leads-count">0 leads</span>
+                            <div class="pagination" id="leads-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scraper Page -->
+                <div id="scraper-page" class="page">
+                    <div class="scraper-tabs">
+                        <button class="tab active" data-tab="linkedin-tab">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </button>
+                        <button class="tab" data-tab="email-tab">
+                            <i class="fas fa-envelope"></i> Email Finder
+                        </button>
+                        <button class="tab" data-tab="web-tab">
+                            <i class="fas fa-globe"></i> Web Scraper
+                        </button>
+                    </div>
+
+                    <!-- LinkedIn Tab -->
+                    <div id="linkedin-tab" class="tab-content active">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>LinkedIn Search</h2>
+                                <div class="linkedin-status" id="linkedin-login-status">
+                                    <span class="status-badge disconnected">Not Connected</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="linkedin-login-section" id="linkedin-login-section">
+                                    <p>Connect your LinkedIn account to start scraping</p>
+                                    <button class="btn btn-primary" onclick="initLinkedIn()">
+                                        <i class="fab fa-linkedin"></i> Connect LinkedIn
+                                    </button>
+                                </div>
+                                <div class="linkedin-search-section" id="linkedin-search-section" style="display:none;">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Search Query</label>
+                                            <input type="text" id="linkedin-query"
+                                                placeholder="e.g., Marketing Manager San Francisco">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Location (optional)</label>
+                                            <input type="text" id="linkedin-location" placeholder="e.g., United States">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Industry (optional)</label>
+                                            <input type="text" id="linkedin-industry" placeholder="e.g., Technology">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="searchLinkedIn()">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                                <div class="scrape-results" id="linkedin-results"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Finder Tab -->
+                    <div id="email-tab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Email Finder</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" id="email-first-name" placeholder="John">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" id="email-last-name" placeholder="Doe">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Company Domain</label>
+                                        <input type="text" id="email-domain" placeholder="company.com">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="verify-email" checked> Verify email via SMTP
+                                    </label>
+                                </div>
+                                <button class="btn btn-primary" onclick="findEmail()">
+                                    <i class="fas fa-search"></i> Find Email
+                                </button>
+                                <div class="email-results" id="email-results"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Scraper Tab -->
+                    <div id="web-tab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Web Scraper</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="scraper-options">
+                                    <button class="option-btn active" data-type="company">Company Info</button>
+                                    <button class="option-btn" data-type="person">Person Search</button>
+                                </div>
+                                <div id="company-scrape-form">
+                                    <div class="form-group">
+                                        <label>Company Name</label>
+                                        <input type="text" id="scrape-company" placeholder="e.g., Google, Microsoft">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="scrapeCompany()">
+                                        <i class="fas fa-search"></i> Find Company Info
+                                    </button>
+                                </div>
+                                <div id="person-scrape-form" style="display:none;">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            <input type="text" id="scrape-first-name" placeholder="John">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input type="text" id="scrape-last-name" placeholder="Doe">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Company (optional)</label>
+                                            <input type="text" id="scrape-person-company" placeholder="Google">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="scrapePerson()">
+                                        <i class="fas fa-search"></i> Find Person
+                                    </button>
+                                </div>
+                                <div class="scrape-results" id="web-results"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaigns Page -->
+                <div id="campaigns-page" class="page">
+                    <div class="page-actions">
+                        <div class="campaign-filters">
+                            <button class="filter-btn active" data-type="">All</button>
+                            <button class="filter-btn" data-type="email">Email</button>
+                            <button class="filter-btn" data-type="linkedin">LinkedIn</button>
+                            <button class="filter-btn" data-type="whatsapp">WhatsApp</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="showCreateCampaignModal()">
+                            <i class="fas fa-plus"></i> Create Campaign
+                        </button>
+                    </div>
+
+                    <div class="campaigns-grid" id="campaigns-grid">
+                        <!-- Campaigns will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Templates Page -->
+                <div id="templates-page" class="page">
+                    <div class="page-actions">
+                        <div class="template-filters">
+                            <button class="filter-btn active" data-type="">All</button>
+                            <button class="filter-btn" data-type="email">Email</button>
+                            <button class="filter-btn" data-type="linkedin">LinkedIn</button>
+                            <button class="filter-btn" data-type="whatsapp">WhatsApp</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="showCreateTemplateModal()">
+                            <i class="fas fa-plus"></i> Create Template
+                        </button>
+                    </div>
+
+                    <div class="templates-grid" id="templates-grid">
+                        <!-- Templates will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Scheduler Page -->
+                <div id="scheduler-page" class="page">
+                    <div class="page-actions">
+                        <h2 style="flex:1;">Campaign Scheduler</h2>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-clock"></i> Scheduled Jobs</h2>
+                                <button class="btn btn-sm btn-secondary" onclick="loadScheduledJobs()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="scheduled-jobs-list">
+                                    <p style="color:var(--text-muted)">No scheduled campaigns</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-calendar-plus"></i> Schedule Campaign</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Select Campaign</label>
+                                    <select id="schedule-campaign-select">
+                                        <option value="">Choose a campaign...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Schedule Type</label>
+                                    <div class="campaign-type-selector">
+                                        <label class="type-option">
+                                            <input type="radio" name="schedule-type" value="once" checked>
+                                            <span><i class="fas fa-calendar"></i> One-time</span>
+                                        </label>
+                                        <label class="type-option">
+                                            <input type="radio" name="schedule-type" value="recurring">
+                                            <span><i class="fas fa-redo"></i> Recurring</span>
+                                        </label>
+                                        <label class="type-option">
+                                            <input type="radio" name="schedule-type" value="daily">
+                                            <span><i class="fas fa-calendar-week"></i> Daily</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="schedule-once-options">
+                                    <div class="form-group">
+                                        <label>Date & Time</label>
+                                        <input type="datetime-local" id="schedule-datetime">
+                                    </div>
+                                </div>
+                                <div id="schedule-recurring-options" style="display:none;">
+                                    <div class="form-group">
+                                        <label>Cron Expression</label>
+                                        <input type="text" id="schedule-cron" placeholder="0 9 * * 1-5">
+                                        <small style="color:var(--text-muted)">e.g., 0 9 * * 1-5 = 9 AM Mon-Fri</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Runs (optional)</label>
+                                        <input type="number" id="schedule-max-runs"
+                                            placeholder="Leave empty for unlimited">
+                                    </div>
+                                </div>
+                                <div id="schedule-daily-options" style="display:none;">
+                                    <div class="form-group">
+                                        <label>Times (comma separated)</label>
+                                        <input type="text" id="schedule-times" placeholder="09:00, 14:00, 18:00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Days</label>
+                                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="1" checked> Mon</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="2" checked> Tue</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="3" checked> Wed</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="4" checked> Thu</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="5" checked> Fri</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="6"> Sat</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="schedule-day"
+                                                    value="0"> Sun</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="scheduleCampaign()">
+                                    <i class="fas fa-clock"></i> Schedule
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proxy Page -->
+                <div id="proxy-page" class="page">
+                    <div class="page-actions">
+                        <h2 style="flex:1;">Proxy Management</h2>
+                        <button class="btn btn-secondary" onclick="testAllProxies()">
+                            <i class="fas fa-vial"></i> Test All
+                        </button>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-cogs"></i> Proxy Settings</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="checkbox-label" style="font-size:1rem;">
+                                        <input type="checkbox" id="proxy-enabled"> Enable Proxy Rotation
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rotation Strategy</label>
+                                    <select id="proxy-strategy">
+                                        <option value="round-robin">Round Robin</option>
+                                        <option value="random">Random</option>
+                                        <option value="least-used">Least Used</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Max Failures Before Remove</label>
+                                    <input type="number" id="proxy-max-failures" value="3" min="1">
+                                </div>
+                                <button class="btn btn-primary" onclick="saveProxyConfig()">
+                                    Save Config
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-plus"></i> Add Proxies</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Proxy List (one per line)</label>
+                                    <textarea id="proxy-list" rows="6" placeholder="ip:port
+ip:port:user:pass
+http://ip:port
+http://user:pass@ip:port"></textarea>
+                                </div>
+                                <button class="btn btn-primary" onclick="addProxies()">
+                                    <i class="fas fa-plus"></i> Add Proxies
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card" style="grid-column:span 2;">
+                            <div class="card-header">
+                                <h2><i class="fas fa-list"></i> Active Proxies (<span id="proxy-count">0</span>)</h2>
+                                <button class="btn btn-sm btn-secondary" onclick="clearProxies()">
+                                    <i class="fas fa-trash"></i> Clear All
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Proxy</th>
+                                                <th>Successes</th>
+                                                <th>Failures</th>
+                                                <th>Avg Response</th>
+                                                <th>Last Used</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="proxies-tbody">
+                                            <tr>
+                                                <td colspan="6" style="text-align:center;color:var(--text-muted)">No
+                                                    proxies configured</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settings-page" class="page">
+                    <div class="settings-grid">
+                        <!-- Email Settings -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-envelope"></i> Email Accounts</h2>
+                                <button class="btn btn-sm btn-primary" onclick="showAddEmailAccountModal()">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="accounts-list" id="email-accounts-list">
+                                    <!-- Email accounts will be listed here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LinkedIn Settings -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fab fa-linkedin"></i> LinkedIn Account</h2>
+                            </div>
+                            <div class="card-body">
+                                <div id="linkedin-account-status">
+                                    <p>No LinkedIn account connected</p>
+                                    <button class="btn btn-primary" onclick="initLinkedIn()">
+                                        Connect LinkedIn
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp Settings -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fab fa-whatsapp"></i> WhatsApp</h2>
+                            </div>
+                            <div class="card-body">
+                                <div id="whatsapp-account-status">
+                                    <p>WhatsApp not connected</p>
+                                    <button class="btn btn-primary" onclick="initWhatsApp()">
+                                        Connect WhatsApp
+                                    </button>
+                                </div>
+                                <div id="whatsapp-qr" style="display:none;">
+                                    <p>Scan QR Code with WhatsApp</p>
+                                    <img id="qr-image" src="" alt="QR Code">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rate Limits -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-tachometer-alt"></i> Rate Limits</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Email Delay (seconds)</label>
+                                    <div class="range-input">
+                                        <input type="number" id="email-delay-min" value="30" min="10">
+                                        <span>to</span>
+                                        <input type="number" id="email-delay-max" value="60" min="20">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>LinkedIn Delay (seconds)</label>
+                                    <div class="range-input">
+                                        <input type="number" id="linkedin-delay-min" value="45" min="30">
+                                        <span>to</span>
+                                        <input type="number" id="linkedin-delay-max" value="90" min="45">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>WhatsApp Delay (seconds)</label>
+                                    <div class="range-input">
+                                        <input type="number" id="whatsapp-delay-min" value="20" min="10">
+                                        <span>to</span>
+                                        <input type="number" id="whatsapp-delay-max" value="45" min="20">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="saveSettings()">
+                                    Save Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Import Modal -->
+    <div class="modal" id="import-modal">
+        <div class="modal-header">
+            <h2>Import Leads</h2>
+            <button class="btn-close" onclick="closeModal('import-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="upload-zone" id="upload-zone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & drop your Excel/CSV file here</p>
+                <p class="small">or click to browse</p>
+                <input type="file" id="import-file" accept=".xlsx,.xls,.csv" hidden>
+            </div>
+            <div class="import-preview" id="import-preview" style="display:none;">
+                <p><strong id="import-filename"></strong></p>
+                <p id="import-rows">0 rows detected</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('import-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="importLeads()" id="import-btn" disabled>Import</button>
+        </div>
+    </div>
+
+    <!-- Add Lead Modal -->
+    <div class="modal" id="add-lead-modal">
+        <div class="modal-header">
+            <h2>Add Lead</h2>
+            <button class="btn-close" onclick="closeModal('add-lead-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name *</label>
+                    <input type="text" id="add-first-name">
+                </div>
+                <div class="form-group">
+                    <label>Last Name *</label>
+                    <input type="text" id="add-last-name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="add-email">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="add-phone">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" id="add-company">
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="add-title">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>LinkedIn URL</label>
+                <input type="url" id="add-linkedin">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('add-lead-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="addLead()">Add Lead</button>
+        </div>
+    </div>
+
+    <!-- Create Campaign Modal -->
+    <div class="modal" id="create-campaign-modal">
+        <div class="modal-header">
+            <h2>Create Campaign</h2>
+            <button class="btn-close" onclick="closeModal('create-campaign-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Campaign Name *</label>
+                <input type="text" id="campaign-name" placeholder="Q1 Outreach">
+            </div>
+            <div class="form-group">
+                <label>Campaign Type *</label>
+                <div class="campaign-type-selector">
+                    <label class="type-option">
+                        <input type="radio" name="campaign-type" value="email" checked>
+                        <span><i class="fas fa-envelope"></i> Email</span>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="campaign-type" value="linkedin">
+                        <span><i class="fab fa-linkedin"></i> LinkedIn</span>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="campaign-type" value="whatsapp">
+                        <span><i class="fab fa-whatsapp"></i> WhatsApp</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Template</label>
+                <select id="campaign-template">
+                    <option value="">Select a template...</option>
+                </select>
+            </div>
+            <div class="form-group" id="linkedin-action-group" style="display:none;">
+                <label>LinkedIn Action</label>
+                <select id="linkedin-action">
+                    <option value="connect">Send Connection Request</option>
+                    <option value="message">Send Message (connections only)</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('create-campaign-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="createCampaign()">Create Campaign</button>
+        </div>
+    </div>
+
+    <!-- Create Template Modal -->
+    <div class="modal modal-lg" id="create-template-modal">
+        <div class="modal-header">
+            <h2>Create Template</h2>
+            <button class="btn-close" onclick="closeModal('create-template-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Template Name *</label>
+                    <input type="text" id="template-name" placeholder="Cold Outreach v1">
+                </div>
+                <div class="form-group">
+                    <label>Type *</label>
+                    <select id="template-type">
+                        <option value="email">Email</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="whatsapp">WhatsApp</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="template-subject-group">
+                <label>Subject Line</label>
+                <input type="text" id="template-subject" placeholder="Quick question, {{first_name}}">
+            </div>
+            <div class="form-group">
+                <label>Message Body *</label>
+                <textarea id="template-body" rows="8" placeholder="Hi {{first_name}},
+
+I noticed you're the {{title}} at {{company}}..."></textarea>
+            </div>
+            <div class="variables-help">
+                <p><strong>Available Variables:</strong></p>
+                <code>{{first_name}}</code> <code>{{last_name}}</code> <code>{{full_name}}</code>
+                <code>{{email}}</code> <code>{{title}}</code> <code>{{company}}</code>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('create-template-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="createTemplate()">Create Template</button>
+        </div>
+    </div>
+
+    <!-- Email Account Modal -->
+    <div class="modal" id="email-account-modal">
+        <div class="modal-header">
+            <h2>Add Email Account</h2>
+            <button class="btn-close" onclick="closeModal('email-account-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Account Name *</label>
+                <input type="text" id="smtp-name" placeholder="Work Email">
+            </div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="smtp-email" placeholder="you@company.com">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>SMTP Host *</label>
+                    <input type="text" id="smtp-host" placeholder="smtp.gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>SMTP Port *</label>
+                    <input type="number" id="smtp-port" value="587">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>SMTP Username *</label>
+                    <input type="text" id="smtp-user" placeholder="you@company.com">
+                </div>
+                <div class="form-group">
+                    <label>SMTP Password *</label>
+                    <input type="password" id="smtp-pass">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Daily Limit</label>
+                <input type="number" id="smtp-limit" value="100">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('email-account-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="addEmailAccount()">Add Account</button>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+
+</html>
